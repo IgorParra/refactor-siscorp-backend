@@ -1,0 +1,18 @@
+{
+	"name": "refactor-siscorp-backend",
+	"version": "1.0.0",
+	"main": "index.js",
+	"repository": "https://github.com/IgorParra/refactor-siscorp-backend.git",
+	"author": "Igor Parra <igor.parra@rpinfo.com.br>",
+	"license": "MIT",
+	"scripts": {
+		"dev:server": "ts-node-dev --transpile-only --ignore-watch node_modules --respawn src/routes/server.ts"
+	},
+	"dependencies": {
+		"express": "^4.18.1"
+	},
+	"devDependencies": {
+		"ts-node-dev": "^1.1.8",
+		"typescript": "^4.6.4"
+	}
+}
