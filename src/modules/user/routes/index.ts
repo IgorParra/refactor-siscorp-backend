@@ -6,7 +6,6 @@ import CreateUserService from "../services/CreateUserService";
 export const userRoutes = Router();
 
 userRoutes.post("/", async (request, response) => {
-	console.log(request.body);
 	const { name, email, password } = request.body;
 
 	const createUser = new CreateUserService();
