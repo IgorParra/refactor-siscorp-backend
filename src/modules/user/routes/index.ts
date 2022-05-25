@@ -2,6 +2,7 @@ import { Router } from "express";
 import "reflect-metadata";
 import { User } from "../entities/User";
 import CreateUserService from "../services/CreateUserService";
+import { GetAllUserService } from '../services/GetAllUserService';
 
 export const userRoutes = Router();
 
@@ -18,3 +19,11 @@ userRoutes.post("/", async (request, response) => {
 
 	return response.json(responseUser);
 });
+
+userRoutes.get('/', async (Request, response) => {
+	const service = new GetAllUserService();
+	
+	const users = await service.execute();
+
+	return response.json(users);
+  });
