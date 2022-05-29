@@ -4,7 +4,7 @@ import { User } from "../entities/User";
 
 
 export class FindByIdUserService {
-    async execute(id: string) {
+    async executeId(id: string) {
         const rep = AppDataSource.getRepository(User);
 
         const user = await rep.findOne({
@@ -17,5 +17,19 @@ export class FindByIdUserService {
 
         return user;
     }
+    async executeEmail(email: string) {
+        const rep = AppDataSource.getRepository(User);
+
+        const user = await rep.findOne({
+            where: { email },
+        });
+
+         if(!(user)){
+            throw new AppError({ message: "User does not exists!" }); 
+         }
+
+        return user;
+    }
+
 
 }

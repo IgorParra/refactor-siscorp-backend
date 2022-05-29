@@ -34,7 +34,18 @@ userRoutes.get('/:id', async (req, res) => {
 
 	const userService = new FindByIdUserService();
 
-	const userFound = await userService.execute(id);
+	const userFound = await userService.executeId(id);
+	
+	return res.json(userFound);
+
+});
+
+userRoutes.get('/email/:email', async (req, res) => {
+	const { email } = req.params;
+
+	const userService = new FindByIdUserService();
+
+	const userFound = await userService.executeEmail(email);
 	
 	return res.json(userFound);
 
