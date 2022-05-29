@@ -2,6 +2,7 @@ import { Router } from "express";
 import "reflect-metadata";
 import { User } from "../entities/User";
 import CreateUserService from "../services/CreateUserService";
+import { FindByIdUserService } from "../services/FindByIdUserService";
 import { GetAllUserService } from '../services/GetAllUserService';
 
 export const userRoutes = Router();
@@ -20,10 +21,21 @@ userRoutes.post("/", async (request, response) => {
 	return response.json(responseUser);
 });
 
-userRoutes.get('/', async (Request, response) => {
+userRoutes.get('/', async (request, response) => {
 	const service = new GetAllUserService();
-	
+
 	const users = await service.execute();
 
 	return response.json(users);
-  });
+});
+
+userRoutes.get('/:id', async (req, res) => {
+	const { id } = req.params;
+
+	const userService = new FindByIdUserService();
+
+	const userFound = await userService.execute(id);
+	
+	return res.json(userFound);
+
+});
