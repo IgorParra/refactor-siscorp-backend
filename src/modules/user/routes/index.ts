@@ -1,7 +1,9 @@
-import { Router } from "express";
+import { DeleteUserService } from './../services/DeleteUserService';
+import { request, Router } from "express";
 import "reflect-metadata";
 import { User } from "../entities/User";
 import CreateUserService from "../services/CreateUserService";
+import { DeleteUserService } from "../services/DeleteUserService";
 import { FindByIdUserService } from "../services/FindByIdUserService";
 import { GetAllUserService } from '../services/GetAllUserService';
 import { UpdeteUserService } from "../services/UpdeteUserService";
@@ -28,6 +30,20 @@ userRoutes.get('/', async (request, response) => {
 	const users = await service.execute();
 
 	return response.json(users);
+});
+
+userRoutes.delete('/:id', async (request, response) => {
+  const { id } = request.params;
+
+  const users = new DeleteUserService();
+
+  const result = await users.execute(id);
+
+  if(result instanceof Error) {
+	  return response.status(400).json(result.message);	
+  }
+
+  return response.status(204).end();
 });
 
 userRoutes.get('/:id', async (req, res) => {
