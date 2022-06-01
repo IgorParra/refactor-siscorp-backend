@@ -30,7 +30,6 @@ userRoutes.get('/', async (request, response) => {
 	const users = await service.execute();
 
 	return response.json(users);
-<<<<<<< HEAD
 });
 
 userRoutes.delete('/:id', async (request, response) => {
@@ -80,20 +79,3 @@ userRoutes.put('/:id', async (req, res) => {
 	return res.json(userUpdate);
 	
 })
-=======
-  });
-
-  userRoutes.delete('/:id', async (request, response) => {
-	const { id } = request.params;
-
-	const users = new DeleteUserService();
-
-	const result = await users.execute(id);
-
-	if(result instanceof Error) {
-		return response.status(400).json(result.message);	
-	}
-
-	return response.status(204).end();
-  });
->>>>>>> 38c53635264d98923717e1c3b8419ecc6911c8b5
