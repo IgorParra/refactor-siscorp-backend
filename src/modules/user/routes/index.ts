@@ -4,6 +4,7 @@ import { User } from "../entities/User";
 import CreateUserService from "../services/CreateUserService";
 import { FindByIdUserService } from "../services/FindByIdUserService";
 import { GetAllUserService } from '../services/GetAllUserService';
+import { UpdeteUserService } from "../services/UpdeteUserService";
 
 export const userRoutes = Router();
 
@@ -50,3 +51,15 @@ userRoutes.get('/email/:email', async (req, res) => {
 	return res.json(userFound);
 
 });
+
+userRoutes.put('/:id', async (req, res) => {
+	const { id } = req.params;
+	const { name, email, password } = req.body;
+
+	const userService = new UpdeteUserService();
+
+	const userUpdate = await userService.execute(id, name, email, password);
+
+	return res.json(userUpdate);
+	
+})
