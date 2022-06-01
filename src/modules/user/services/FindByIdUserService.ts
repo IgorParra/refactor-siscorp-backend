@@ -17,6 +17,8 @@ export class FindByIdUserService {
 
         return user;
     }
+
+    //--------------------------------------------------------------------------
     async executeEmail(email: string) {
         const rep = AppDataSource.getRepository(User);
 
