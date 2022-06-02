@@ -3,7 +3,7 @@ import { request, Router } from "express";
 import "reflect-metadata";
 import { User } from "../entities/User";
 import CreateUserService from "../services/CreateUserService";
-import { DeleteUserService } from "../services/DeleteUserService";
+//import { DeleteUserService } from "../services/DeleteUserService";
 import { FindByIdUserService } from "../services/FindByIdUserService";
 import { GetAllUserService } from '../services/GetAllUserService';
 import { UpdeteUserService } from "../services/UpdeteUserService";
@@ -33,40 +33,54 @@ userRoutes.get('/', async (request, response) => {
 });
 
 userRoutes.delete('/:id', async (request, response) => {
-  const { id } = request.params;
+	const { id } = request.params;
 
-  const users = new DeleteUserService();
+	const users = new DeleteUserService();
 
-  const result = await users.execute(id);
+	const result = await users.execute(id);
 
-  if(result instanceof Error) {
-	  return response.status(400).json(result.message);	
-  }
+	if (result instanceof Error) {
+		return response.status(400).json(result.message);
+	}
 
-  return response.status(204).end();
+	return response.status(204).end();
 });
 
-userRoutes.get('/:id', async (req, res) => {
+userRoutes.get('/:id/:type', async (req, res) => {
 	const { id } = req.params;
+	const { type } = req.params;
 
 	const userService = new FindByIdUserService();
 
-	const userFound = await userService.executeId(id);
-	
-	return res.json(userFound);
+	if (type == "id") {
+		const userFound = await userService.executeId(id);
+		console.log("ID");
+		return res.json(userFound);
+
+	} if (type == "email") {
+		const userFound = await userService.executeEmail(id);
+		console.log("Email");
+		return res.json(userFound);
+
+	} else {
+		return res.json("Incorrect type");
+	}
+
+
+
 
 });
 
-userRoutes.get('/email/:email', async (req, res) => {
-	const { email } = req.params;
+// userRoutes.get('/email/:email', async (req, res) => {
+// 	const { email } = req.params;
 
-	const userService = new FindByIdUserService();
+// 	const userService = new FindByIdUserService();
 
-	const userFound = await userService.executeEmail(email);
-	
-	return res.json(userFound);
+// 	const userFound = await userService.executeEmail(email);
 
-});
+// 	return res.json(userFound);
+
+// });
 
 userRoutes.put('/:id', async (req, res) => {
 	const { id } = req.params;
@@ -77,5 +91,5 @@ userRoutes.put('/:id', async (req, res) => {
 	const userUpdate = await userService.execute(id, name, email, password);
 
 	return res.json(userUpdate);
-	
+
 })
