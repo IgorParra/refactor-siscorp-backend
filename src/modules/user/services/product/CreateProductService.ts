@@ -1,6 +1,6 @@
-import { AppDataSource } from "../../../shared/database";
-import AppError from "../../../shared/errors/AppError";
-import { Product } from "../entities/Product";
+import { AppDataSource } from "../../../../shared/database";
+import AppError from "../../../../shared/errors/AppError";
+import { Product } from "../../entities/Product";
 
 interface Request {
     barcode: string;

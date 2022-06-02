@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { Product } from "../entities/Product";
-import { CreateProductService } from "../services/CreateProductService";
+import { CreateProductService } from "../services/product/CreateProductService";
 
 
 
