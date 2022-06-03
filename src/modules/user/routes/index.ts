@@ -6,10 +6,16 @@ import CreateUserService from "../services/CreateUserService";
 import { FindByIdUserService } from "../services/FindByIdUserService";
 import { GetAllUserService } from '../services/GetAllUserService';
 import { UpdeteUserService } from "../services/UpdeteUserService";
+
 const authMiddleware = require("../middlewares/auth");
+const jwt = require("jsonwebtoken");
+const authConfig = require("../config/auth.json");
 
 export const userRoutes = Router();
-userRoutes.use(authMiddleware);
+export const userMiddleRoutes = Router();
+
+userMiddleRoutes.use(authMiddleware);
+
 
 userRoutes.post("/", async (request, response) => {
 	const { name, email, password } = request.body;
@@ -22,18 +28,23 @@ userRoutes.post("/", async (request, response) => {
 
 	delete responseUser.password;
 
-	return response.json(responseUser);
+	const token = jwt.sign({ id: user.id}, authConfig.secret, {
+		expiresIn: 86400,
+	});
+
+	return response.json({responseUser,token});
 });
 
-userRoutes.get('/', async (request, response) => {
+
+userMiddleRoutes.get('/', async (request, response) => {
 	const service = new GetAllUserService();
 
 	const users = await service.execute();
 
-	return response.json(users);
+	return response.json({users});
 });
 
-userRoutes.delete('/:id', async (request, response) => {
+userMiddleRoutes.delete('/:id', async (request, response) => {
 	const { id } = request.params;
 
 	const users = new DeleteUserService();
@@ -47,7 +58,7 @@ userRoutes.delete('/:id', async (request, response) => {
 	return response.status(204).end();
 });
 
-userRoutes.get('/:id/:type', async (req, res) => {
+userMiddleRoutes.get('/:id/:type', async (req, res) => {
 	const { id } = req.params;
 	const { type } = req.params;
 
@@ -67,7 +78,7 @@ userRoutes.get('/:id/:type', async (req, res) => {
 
 });
 
-userRoutes.put('/:id', async (req, res) => {
+userMiddleRoutes.put('/:id', async (req, res) => {
 	const { id } = req.params;
 	const { name, email, password } = req.body;
 

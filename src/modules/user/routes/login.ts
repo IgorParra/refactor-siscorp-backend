@@ -11,7 +11,7 @@ loginRoutes.post('/', async (req, res) => {
     const loginService = new LoginService();
 
     const {user, token} = await loginService.execute(email, password);
-
+    
     return res.json({user, token});
     
 })
