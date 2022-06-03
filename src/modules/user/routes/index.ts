@@ -3,12 +3,13 @@ import { request, Router } from "express";
 import "reflect-metadata";
 import { User } from "../entities/User";
 import CreateUserService from "../services/CreateUserService";
-//import { DeleteUserService } from "../services/DeleteUserService";
 import { FindByIdUserService } from "../services/FindByIdUserService";
 import { GetAllUserService } from '../services/GetAllUserService';
 import { UpdeteUserService } from "../services/UpdeteUserService";
+const authMiddleware = require("../middlewares/auth");
 
 export const userRoutes = Router();
+userRoutes.use(authMiddleware);
 
 userRoutes.post("/", async (request, response) => {
 	const { name, email, password } = request.body;
@@ -54,33 +55,17 @@ userRoutes.get('/:id/:type', async (req, res) => {
 
 	if (type == "id") {
 		const userFound = await userService.executeId(id);
-		console.log("ID");
 		return res.json(userFound);
 
 	} if (type == "email") {
 		const userFound = await userService.executeEmail(id);
-		console.log("Email");
 		return res.json(userFound);
 
 	} else {
 		return res.json("Incorrect type");
 	}
 
-
-
-
 });
-
-// userRoutes.get('/email/:email', async (req, res) => {
-// 	const { email } = req.params;
-
-// 	const userService = new FindByIdUserService();
-
-// 	const userFound = await userService.executeEmail(email);
-
-// 	return res.json(userFound);
-
-// });
 
 userRoutes.put('/:id', async (req, res) => {
 	const { id } = req.params;
