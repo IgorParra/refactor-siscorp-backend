@@ -1,14 +1,18 @@
-import { DeleteUserService } from './../services/DeleteUserService';
-import { request, Router } from "express";
+import { Router } from "express";
 import "reflect-metadata";
-import { User } from "../entities/User";
-import CreateUserService from "../services/CreateUserService";
-import { DeleteUserService } from "../services/DeleteUserService";
-import { FindByIdUserService } from "../services/FindByIdUserService";
-import { GetAllUserService } from '../services/GetAllUserService';
-import { UpdeteUserService } from "../services/UpdeteUserService";
+import { EnshureUserIsAuthenticated } from "../routes/middlewares/EnsureUserIsAuthenticated";
+import {
+	CreateUserService,
+	DeleteUserService,
+	FindUserByIdOrEmail,
+	GetAllUserService,
+	UpdateUserService,
+} from "../services";
 
 export const userRoutes = Router();
+export const userPrivateRoutes = Router();
+
+userPrivateRoutes.use(EnshureUserIsAuthenticated);
 
 userRoutes.post("/", async (request, response) => {
 	const { name, email, password } = request.body;
@@ -17,65 +21,47 @@ userRoutes.post("/", async (request, response) => {
 
 	const user = await createUser.execute({ name, email, password });
 
-	const responseUser: Partial<User> = { ...user };
+	delete user.password;
 
-	delete responseUser.password;
-
-	return response.json(responseUser);
+	return response
+		.status(201)
+		.json({ message: "Usuário criado com sucesso", user });
 });
 
-userRoutes.get('/', async (request, response) => {
-	const service = new GetAllUserService();
+userPrivateRoutes.get("/", async (request, response) => {
+	const GetAllUser = new GetAllUserService();
 
-	const users = await service.execute();
+	const users = await GetAllUser.execute();
 
-	return response.json(users);
+	return response.status(200).json(users);
 });
 
-userRoutes.delete('/:id', async (request, response) => {
-  const { id } = request.params;
+userPrivateRoutes.delete("/:id", async (request, response) => {
+	const { id } = request.params;
 
-  const users = new DeleteUserService();
+	const DeleteteUser = new DeleteUserService();
 
-  const result = await users.execute(id);
+	const result = await DeleteteUser.execute(id);
 
-  if(result instanceof Error) {
-	  return response.status(400).json(result.message);	
-  }
-
-  return response.status(204).end();
+	return response.status(204).json(result);
 });
 
-userRoutes.get('/:id', async (req, res) => {
-	const { id } = req.params;
+userPrivateRoutes.get("/:id", async (request, response) => {
+	const { id } = request.params;
+	const FindByIdOrEmail = new FindUserByIdOrEmail();
 
-	const userService = new FindByIdUserService();
+	const result = await FindByIdOrEmail.execute(id);
 
-	const userFound = await userService.executeId(id);
-	
-	return res.json(userFound);
-
+	return response.status(200).json(result);
 });
 
-userRoutes.get('/email/:email', async (req, res) => {
-	const { email } = req.params;
-
-	const userService = new FindByIdUserService();
-
-	const userFound = await userService.executeEmail(email);
-	
-	return res.json(userFound);
-
-});
-
-userRoutes.put('/:id', async (req, res) => {
+userPrivateRoutes.put("/:id", async (req, res) => {
 	const { id } = req.params;
 	const { name, email, password } = req.body;
 
-	const userService = new UpdeteUserService();
+	const userService = new UpdateUserService();
 
 	const userUpdate = await userService.execute(id, name, email, password);
 
 	return res.json(userUpdate);
-	
-})
+});
