@@ -1,12 +1,10 @@
 import { Router } from "express";
-import { productRoutes } from "../../modules/user/routes/product";
-import { userRoutes } from "../../modules/user/routes/";
-import { userMiddleRoutes } from "../../modules/user/routes/";
-import { loginRoutes } from "../../modules/user/routes/login";
+import { productRoutes } from "../../modules/product/routes";
+import { loginRoutes } from "../../modules/session/routes";
+import { userPrivateRoutes, userRoutes } from "../../modules/user/routes/";
 
 export const routes = Router();
 
-routes.use("/users", userRoutes);
-routes.use("/users", userMiddleRoutes);
-routes.use("/products" , productRoutes);
-routes.use("/authenticate" , loginRoutes);
+routes.use("/users", userRoutes, userPrivateRoutes);
+routes.use("/products", productRoutes);
+routes.use("/authenticate", loginRoutes);

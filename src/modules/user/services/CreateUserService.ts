@@ -9,7 +9,7 @@ interface Request {
 	password: string;
 }
 
-class CreateUserService {
+export class CreateUserService {
 	public async execute({ name, email, password }: Request): Promise<User> {
 		const usersRepository = AppDataSource.getRepository(User);
 
@@ -33,5 +33,3 @@ class CreateUserService {
 		return newUser;
 	}
 }
-
-export default CreateUserService;

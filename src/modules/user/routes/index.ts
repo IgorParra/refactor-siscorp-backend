@@ -1,21 +1,18 @@
-import { DeleteUserService } from './../services/DeleteUserService';
-import { request, Router } from "express";
+import { Router } from "express";
 import "reflect-metadata";
-import { User } from "../entities/User";
-import CreateUserService from "../services/CreateUserService";
-import { FindByIdUserService } from "../services/FindByIdUserService";
-import { GetAllUserService } from '../services/GetAllUserService';
-import { UpdeteUserService } from "../services/UpdeteUserService";
-
-const authMiddleware = require("../middlewares/auth");
-const jwt = require("jsonwebtoken");
-const authConfig = require("../config/auth.json");
+import { EnshureUserIsAuthenticated } from "../routes/middlewares/EnsureUserIsAuthenticated";
+import {
+	CreateUserService,
+	DeleteUserService,
+	FindUserByIdOrEmail,
+	GetAllUserService,
+	UpdateUserService,
+} from "../services";
 
 export const userRoutes = Router();
-export const userMiddleRoutes = Router();
+export const userPrivateRoutes = Router();
 
-userMiddleRoutes.use(authMiddleware);
-
+userPrivateRoutes.use(EnshureUserIsAuthenticated);
 
 userRoutes.post("/", async (request, response) => {
 	const { name, email, password } = request.body;
@@ -24,68 +21,47 @@ userRoutes.post("/", async (request, response) => {
 
 	const user = await createUser.execute({ name, email, password });
 
-	const responseUser: Partial<User> = { ...user };
+	delete user.password;
 
-	delete responseUser.password;
-
-	const token = jwt.sign({ id: user.id}, authConfig.secret, {
-		expiresIn: 86400,
-	});
-
-	return response.json({responseUser,token});
+	return response
+		.status(201)
+		.json({ message: "Usuário criado com sucesso", user });
 });
 
+userPrivateRoutes.get("/", async (request, response) => {
+	const GetAllUser = new GetAllUserService();
 
-userMiddleRoutes.get('/', async (request, response) => {
-	const service = new GetAllUserService();
+	const users = await GetAllUser.execute();
 
-	const users = await service.execute();
-
-	return response.json({users});
+	return response.status(200).json(users);
 });
 
-userMiddleRoutes.delete('/:id', async (request, response) => {
+userPrivateRoutes.delete("/:id", async (request, response) => {
 	const { id } = request.params;
 
-	const users = new DeleteUserService();
+	const DeleteteUser = new DeleteUserService();
 
-	const result = await users.execute(id);
+	const result = await DeleteteUser.execute(id);
 
-	if (result instanceof Error) {
-		return response.status(400).json(result.message);
-	}
-
-	return response.status(204).end();
+	return response.status(204).json(result);
 });
 
-userMiddleRoutes.get('/:id/:type', async (req, res) => {
-	const { id } = req.params;
-	const { type } = req.params;
+userPrivateRoutes.get("/:id", async (request, response) => {
+	const { id } = request.params;
+	const FindByIdOrEmail = new FindUserByIdOrEmail();
 
-	const userService = new FindByIdUserService();
+	const result = await FindByIdOrEmail.execute(id);
 
-	if (type == "id") {
-		const userFound = await userService.executeId(id);
-		return res.json(userFound);
-
-	} if (type == "email") {
-		const userFound = await userService.executeEmail(id);
-		return res.json(userFound);
-
-	} else {
-		return res.json("Incorrect type");
-	}
-
+	return response.status(200).json(result);
 });
 
-userMiddleRoutes.put('/:id', async (req, res) => {
+userPrivateRoutes.put("/:id", async (req, res) => {
 	const { id } = req.params;
 	const { name, email, password } = req.body;
 
-	const userService = new UpdeteUserService();
+	const userService = new UpdateUserService();
 
 	const userUpdate = await userService.execute(id, name, email, password);
 
 	return res.json(userUpdate);
-
-})
+});
