@@ -1,9 +1,12 @@
+
+import { Stock } from "../../stock/entity/Stock";
 import {
 	Column,
 	CreateDateColumn,
 	Entity,
+	OneToMany,
 	PrimaryGeneratedColumn,
-	UpdateDateColumn,
+	UpdateDateColumn
 } from "typeorm";
 
 @Entity("product")
@@ -31,4 +34,7 @@ export class Product {
 
 	@UpdateDateColumn()
 	last_movement: Date;
+
+	@OneToMany(() => Stock, (Stock)=> Stock.barcode)
+	stock: Stock[];
 }

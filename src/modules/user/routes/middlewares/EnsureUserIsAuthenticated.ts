@@ -1,7 +1,7 @@
 import { verify } from "jsonwebtoken";
 import { secret } from "../../../../config/auth.json";
 
-export const EnshureUserIsAuthenticated = (request, response, next) => {
+export const EnsureUserIsAuthenticated = (request, response, next) => {
 	const {
 		headers: { authorization },
 	} = request;
