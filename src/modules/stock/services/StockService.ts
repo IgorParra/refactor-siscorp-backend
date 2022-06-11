@@ -3,6 +3,7 @@ import { AppDataSource } from "../../../shared/database";
 import AppError from "../../../shared/errors/AppError";
 import { Product } from "../../product/entity/Product";
 import { Stock } from "../entity/Stock";
+import { MovimentService } from "./MovimentService";
 
 interface request {
     idMoviment: string,
@@ -17,7 +18,7 @@ interface request {
 
 export class StockService {
     public async execute({ idMoviment, documentCode, barcode, quantity, provider, batch, validity }: request): Promise<Stock> {
-        const naturezaMovimento = false;
+        const naturezaMovimento = true;
         const productRepository = AppDataSource.getRepository(Product);
         const stockRepository = AppDataSource.getRepository(Stock);
 
@@ -44,6 +45,8 @@ export class StockService {
             });
 
             await stockRepository.save(newProductStock);
+            const movimentService = new MovimentService();
+            movimentService.execute({ idMoviment, quantity, stock: newProductStock });
             return newProductStock;
         }
         var total = 0;
@@ -61,7 +64,8 @@ export class StockService {
 
                     updateQuantity.quantity = updateQuantity.quantity + quantity;
                     await stockRepository.save(updateQuantity);
-                    console.log(total)
+                    const movimentService = new MovimentService();
+                    movimentService.execute({ idMoviment, quantity, stock: updateQuantity });
 
                     return updateQuantity
                 }
@@ -76,18 +80,20 @@ export class StockService {
                     const updateQuantity = await stockRepository.findOne({
                         where: { id: productsStockExisting[i].id },
                     });
-                    
-                    if(updateQuantity.quantity < quantity){
+
+                    if (updateQuantity.quantity < quantity) {
                         quantity = quantity - updateQuantity.quantity;
-                        updateQuantity.quantity=0;
+                        updateQuantity.quantity = 0;
                         await stockRepository.save(updateQuantity);
-                    }else{
+                    } else {
                         updateQuantity.quantity = updateQuantity.quantity - quantity;
                         await stockRepository.save(updateQuantity);
-                        
+                        const movimentService = new MovimentService();
+                        movimentService.execute({ idMoviment, quantity, stock: updateQuantity });
+
                         return updateQuantity
                     }
-                    
+
 
                 }
             }
@@ -104,6 +110,8 @@ export class StockService {
         });
 
         await stockRepository.save(newProductStock);
+        const movimentService = new MovimentService();
+        movimentService.execute({ idMoviment, quantity, stock: newProductStock });
         return newProductStock;
 
         //---------------------------------------------------------------------------------

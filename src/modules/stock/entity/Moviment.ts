@@ -18,5 +18,5 @@ export class Moviment{
 	quantity: number;
 
     @ManyToOne(() => Stock, (Stock) => Stock.moviment)
-    stockId: Stock;
+    stock: Stock;
 }

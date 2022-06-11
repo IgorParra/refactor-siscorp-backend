@@ -34,7 +34,7 @@ export class Stock {
 	@CreateDateColumn()
 	validity: Date;
 
-    @OneToMany(() => Moviment, (Moviment)=> Moviment.stockId)
+    @OneToMany(() => Moviment, (Moviment)=> Moviment.stock)
 	moviment: Moviment[];
 
     @ManyToOne(() => Product, (Product) => Product.stock)
