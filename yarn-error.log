@@ -1,30 +1,21 @@
 Arguments: 
-  C:\Users\Igor\AppData\Local\nvs\default\node.exe C:\Users\Igor\.node\corepack\yarn\1.22.15\bin\yarn.js add -D @types/bcrypts
+  C:\Program Files\nodejs\node.exe C:\Users\PICHAU\AppData\Roaming\npm\node_modules\yarn\bin\yarn.js
 
 PATH: 
-  C:\Program Files\OpenJDK\openjdk-11.0.13_8\bin;C:\Program Files\Git\cmd;C:\Program Files\Docker\Docker\resources\bin;C:\ProgramData\DockerDesktop\version-bin;C:\Users\Igor\AppData\Local\Microsoft\WindowsApps;C:\Users\Igor\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\Igor\AppData\Local\nvs\default;C:\Users\Igor\AppData\Local\nvs\;C:\Program Files\OpenJDK\openjdk-11.0.13_8\bin;C:\WINDOWS\system32;
+  C:\Python39\Scripts\;C:\Python39\;C:\Program Files (x86)\Common Files\Oracle\Java\javapath;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files\Java\jdk-14.0.2\bin;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\NVIDIA Corporation\NVIDIA NvDLISR;C:\Program Files\dotnet\;C:\Program Files\nodejs\;C:\ProgramData\chocolatey\bin;C:\Program Files\Git\cmd;C:\Program Files\Docker\Docker\resources\bin;C:\ProgramData\DockerDesktop\version-bin;C:\Program Files\MySQL\MySQL Shell 8.0\bin\;C:\Users\PICHAU\AppData\Local\Microsoft\WindowsApps;C:\Users\PICHAU\.dotnet\tools;C:\Users\PICHAU\AppData\Roaming\npm;C:\Users\PICHAU\AppData\Local\GitHubDesktop\bin
 
 Yarn version: 
-  1.22.15
+  1.22.18
 
 Node version: 
-  16.13.0
+  14.18.0
 
 Platform: 
   win32 x64
 
 Trace: 
-  Error: https://registry.yarnpkg.com/@types%2fbcrypts: Not found
-      at Request.params.callback [as _callback] (C:\Users\Igor\.node\corepack\yarn\1.22.15\lib\cli.js:66140:18)
-      at Request.self.callback (C:\Users\Igor\.node\corepack\yarn\1.22.15\lib\cli.js:140885:22)
-      at Request.emit (node:events:390:28)
-      at Request.<anonymous> (C:\Users\Igor\.node\corepack\yarn\1.22.15\lib\cli.js:141857:10)
-      at Request.emit (node:events:390:28)
-      at IncomingMessage.<anonymous> (C:\Users\Igor\.node\corepack\yarn\1.22.15\lib\cli.js:141779:12)
-      at Object.onceWrapper (node:events:509:28)
-      at IncomingMessage.emit (node:events:402:35)
-      at endReadableNT (node:internal/streams/readable:1343:12)
-      at processTicksAndRejections (node:internal/process/task_queues:83:21)
+  Error: read ECONNRESET
+      at TLSWrap.onStreamRead (internal/stream_base_commons.js:209:20)
 
 npm manifest: 
   {
@@ -52,6 +43,7 @@ npm manifest:
   	},
   	"devDependencies": {
   		"@types/bcrypt": "^5.0.0",
+  		"@types/bcryptjs": "^2.4.2",
   		"@types/jsonwebtoken": "^8.5.8",
   		"ts-node-dev": "^1.1.8",
   		"typescript": "^4.6.4"
@@ -77,6 +69,11 @@ Lockfile:
     integrity sha512-agtcFKaruL8TmcvqbndlqHPSJgsolhf/qPWchFlgnW1gECTN/nKbFcoFnvKAQRFfKbh+BO6A3SWdJu9t+xF3Lw==
     dependencies:
       "@types/node" "*"
+  
+  "@types/bcryptjs@^2.4.2":
+    version "2.4.2"
+    resolved "https://registry.yarnpkg.com/@types/bcryptjs/-/bcryptjs-2.4.2.tgz#e3530eac9dd136bfdfb0e43df2c4c5ce1f77dfae"
+    integrity sha512-LiMQ6EOPob/4yUL66SZzu6Yh77cbzJFYll+ZfaPiPPFswtIlA/Fs1MzdKYA7JApHU49zQTbJGX3PDmCpIdDBRQ==
   
   "@types/body-parser@*":
     version "1.19.2"

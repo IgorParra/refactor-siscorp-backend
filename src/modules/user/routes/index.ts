@@ -12,7 +12,7 @@ import {
 export const userRoutes = Router();
 export const userPrivateRoutes = Router();
 
-userPrivateRoutes.use(EnshureUserIsAuthenticated);
+userPrivateRoutes.use(EnsureUserIsAuthenticated);
 
 userRoutes.post("/", async (request, response) => {
 	const { name, email, password } = request.body;
