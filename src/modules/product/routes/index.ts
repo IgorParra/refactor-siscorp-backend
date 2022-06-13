@@ -1,10 +1,10 @@
 import { Router } from "express";
-import { EnshureUserIsAuthenticated } from "../../user/routes/middlewares/EnsureUserIsAuthenticated";
-import { CreateProductService } from "./services/CreateProductService";
+import { EnsureUserIsAuthenticated } from "../../user/routes/middlewares/EnsureUserIsAuthenticated";
+import { CreateProductService } from "../services/CreateProductService";
 
 export const productRoutes = Router();
 
-productRoutes.use(EnshureUserIsAuthenticated);
+productRoutes.use(EnsureUserIsAuthenticated);
 
 productRoutes.post("/", async (request, response) => {
 	const product = request.body;
