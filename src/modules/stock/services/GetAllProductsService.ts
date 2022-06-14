@@ -1,12 +1,10 @@
-import { Product } from "modules/product/entity/Product";
+import { Stock } from "../entity/Stock";
 import { AppDataSource } from "../../../shared/database";
 
-export class GetAllProductsService{
+export class GetAllProductsInStockService{
 async execute() {
-    const stockRepository = AppDataSource.getRepository(Product);
-    const productsInStock = await stockRepository.find({ 
-    });
-    
+    const stockRepository = AppDataSource.getRepository(Stock);
+    const productsInStock = await stockRepository.find();
     return productsInStock;
 }
 

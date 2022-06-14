@@ -1,5 +1,4 @@
 import { Product } from "../../product/entity/Product";
-import { Moviment } from "../entity/Moviment";
 
 import {
 	Column,
@@ -33,9 +32,6 @@ export class Stock {
 
 	@CreateDateColumn()
 	validity: Date;
-
-    @OneToMany(() => Moviment, (Moviment)=> Moviment.stock)
-	moviment: Moviment[];
 
     @ManyToOne(() => Product, (Product) => Product.stock)
     barcode: Product;
