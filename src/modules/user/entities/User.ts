@@ -11,9 +11,6 @@ export class User {
 	@PrimaryGeneratedColumn("uuid")
 	id: string;
 
-	@CreateDateColumn()
-	created_at: Date;
-
 	@Column()
 	email: string;
 
@@ -22,6 +19,9 @@ export class User {
 
 	@Column()
 	password: string;
+
+	@CreateDateColumn()
+	created_at: Date;
 
 	@UpdateDateColumn()
 	updated_at: Date;
