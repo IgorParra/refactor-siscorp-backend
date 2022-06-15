@@ -1,9 +1,8 @@
 import { Product } from "../../product/entity/Product";
-import { Moviment } from "../entity/Moviment";
+import { Stock_moviment } from "./StockMoviment";
 
 import {
 	Column,
-	CreateDateColumn,
 	Entity,
     ManyToOne,
     OneToMany,
@@ -17,12 +16,6 @@ export class Stock {
     id: string;
 
     @Column()
-    idMoviment: string;
-
-    @Column()
-	documentCode: string;
-
-    @Column()
     quantity: number;
 
     @Column()
@@ -31,14 +24,17 @@ export class Stock {
     @Column()
     batch: string;
 
-	@CreateDateColumn()
+	@Column("timestamp")
 	validity: Date;
 
-    @OneToMany(() => Moviment, (Moviment)=> Moviment.stock)
-	moviment: Moviment[];
+    @OneToMany(() => Stock_moviment, (Stock_moviment)=> Stock_moviment.product_in_stock_id)
+	stock_moviment: Stock_moviment[];
 
     @ManyToOne(() => Product, (Product) => Product.stock)
-    barcode: Product;
+    product_id: Product;
+
+    @Column()
+    idMoviment: string;
 
 
 }

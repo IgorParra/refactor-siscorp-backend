@@ -1,10 +1,10 @@
 import { RelationId } from "typeorm";
-import { Product } from "../../../modules/product/entity/Product";
+import { Product } from "../../product/entity/Product";
 import { AppDataSource } from "../../../shared/database";
 import AppError from "../../../shared/errors/AppError";
 import { Stock } from "../entity/Stock";
 
-export class FindStockServices {
+export class FindProductStockServices {
     async execute(barcodeProduct: string) {
         const productRepository = AppDataSource.getRepository(Product)
         const stockRepository = AppDataSource.getRepository(Stock)
@@ -25,9 +25,9 @@ export class FindStockServices {
                 validity:  true
 
             },            
-            relations: ["barcode"],
+            relations: ["product"],
             where: {
-                barcode : {
+                product : {
                     id : productFound.id
                 }
             }

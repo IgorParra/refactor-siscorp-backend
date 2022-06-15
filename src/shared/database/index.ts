@@ -3,7 +3,7 @@ import { DataSource } from "typeorm";
 import { User } from "../../modules/user/entities/User";
 import { Product } from "../../modules/product/entity/Product";
 import { Stock } from "../../modules/stock/entity/Stock";
-import { Moviment } from "../../modules/stock/entity/Moviment";
+import { Stock_moviment } from "../../modules/stock/entity/StockMoviment";
 
 
 export const AppDataSource = new DataSource({
@@ -13,7 +13,7 @@ export const AppDataSource = new DataSource({
 	username: "postgres",
 	password: "sisCorpPG16734",
 	database: "postgres",
-	entities: [User,Product,Stock,Moviment],
+	entities: [User,Product,Stock,Stock_moviment],
 	migrations: ["src/database/migrations/*.ts"],
 	synchronize: true,
 	logging: false,

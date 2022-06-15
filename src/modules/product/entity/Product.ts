@@ -35,6 +35,6 @@ export class Product {
 	@UpdateDateColumn()
 	last_movement: Date;
 
-	@OneToMany(() => Stock, (Stock)=> Stock.barcode)
+	@OneToMany(() => Stock, (Stock)=> Stock.product)
 	stock: Stock[];
 }

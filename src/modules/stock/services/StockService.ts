@@ -3,7 +3,8 @@ import { AppDataSource } from "../../../shared/database";
 import AppError from "../../../shared/errors/AppError";
 import { Product } from "../../product/entity/Product";
 import { Stock } from "../entity/Stock";
-import { MovimentService } from "./MovimentService";
+import { Stock_moviment } from "../entity/StockMoviment";
+import { StockMovimentService } from "./StockMovimentService";
 
 interface request {
     idMoviment: string,
@@ -12,15 +13,16 @@ interface request {
     quantity: number,
     provider: string,
     batch: string,
-    validity: Date
+    validity: Date,
+    naturezaMovimento: boolean
 }
 
 
 export class StockService {
-    public async execute({ idMoviment, documentCode, barcode, quantity, provider, batch, validity }: request): Promise<Stock> {
-        const naturezaMovimento = true;
+    public async execute({ idMoviment, documentCode, barcode, quantity, provider, batch, validity, naturezaMovimento }: request): Promise<Stock> {
         const productRepository = AppDataSource.getRepository(Product);
         const stockRepository = AppDataSource.getRepository(Stock);
+        const stock_moviment = AppDataSource.getRepository(Stock_moviment);
 
         const producAlreadyExist = await productRepository.findOne({
             where: { barcode },
@@ -30,52 +32,69 @@ export class StockService {
             throw new AppError({ message: "Product not registered." })
         }
 
-        const productsStockExisting = await stockRepository.find({
-            where: [{ barcode: { barcode } }],
+        const productsStockExisting = await stockRepository.findOne({
+            where: { provider: provider, batch: batch, validity: validity, product_id: { id: producAlreadyExist.id } }
         });
-        if (productsStockExisting.length == 0) {
-            const newProductStock = stockRepository.create({
-                idMoviment,
-                documentCode,
-                barcode: producAlreadyExist,
-                quantity,
-                provider,
-                batch,
-                validity
+
+
+        const newStockMovimento = stock_moviment.create({
+            idMoviment,
+            documentCode,
+            quantity,
+            product_in_stock_id: productsStockExisting
+        })
+
+
+        if (naturezaMovimento == true) {
+            if (!productsStockExisting) {
+
+                const newProductStock = stockRepository.create({
+                    idMoviment,
+                    product_id: producAlreadyExist,
+                    quantity,
+                    provider,
+                    batch,
+                    validity
+                });
+
+                newStockMovimento.product_in_stock_id = newProductStock
+
+                await stockRepository.save(newProductStock);
+                const movimentService = new StockMovimentService();
+                movimentService.execute(newStockMovimento);
+                return newProductStock;
+
+            }
+
+            productsStockExisting.quantity += quantity;
+
+            stockRepository.save(productsStockExisting);
+            const movimentService = new StockMovimentService();
+            movimentService.execute(newStockMovimento);
+            return productsStockExisting;
+
+        }
+        else {
+
+            const listProductsStockExisting = await stockRepository.find({
+                select: { quantity: true },
+                where: [{ product_id: { barcode } }],
+
             });
 
-            await stockRepository.save(newProductStock);
-            const movimentService = new MovimentService();
-            movimentService.execute({ idMoviment, quantity, stock: newProductStock });
-            return newProductStock;
-        }
-        var total = 0;
-        for (var i = 0; i < productsStockExisting.length; i++) {
-            total = total + productsStockExisting[i].quantity;
-            if (naturezaMovimento == true) {
-                if (productsStockExisting[i].provider == provider && productsStockExisting[i].batch == batch
-                    // && product.validity.valueOf() == validity.valueOf() 
-                ) {
-
-                    const updateQuantity = await stockRepository.findOne({
-                        where: { id: productsStockExisting[i].id },
-                    });
-
-
-                    updateQuantity.quantity = updateQuantity.quantity + quantity;
-                    await stockRepository.save(updateQuantity);
-                    const movimentService = new MovimentService();
-                    movimentService.execute({ idMoviment, quantity, stock: updateQuantity });
-
-                    return updateQuantity
-                }
+            //Tentar retornar o total na consuta no banco de dados
+            var quantityTotal = 0;
+            for (var i = 0; i < listProductsStockExisting.length; i++) {
+                quantityTotal += listProductsStockExisting[i].quantity;
             }
-        }
-        if (naturezaMovimento == false) {
-            if (total < quantity) {
+            //----------------------------------------------
+
+
+            //Validaçao se tem quantidade suficiente em estoque
+            if (quantityTotal < quantity) {
                 throw new AppError({ message: "Quantity not available." })
             } else {
-                for (var i = 0; i < productsStockExisting.length; i++) {
+                for (var i = 0; i < listProductsStockExisting.length; i++) {
 
                     const updateQuantity = await stockRepository.findOne({
                         where: { id: productsStockExisting[i].id },
@@ -87,45 +106,12 @@ export class StockService {
                         await stockRepository.save(updateQuantity);
                     } else {
                         updateQuantity.quantity = updateQuantity.quantity - quantity;
-                        await stockRepository.save(updateQuantity);
-                        const movimentService = new MovimentService();
-                        movimentService.execute({ idMoviment, quantity, stock: updateQuantity });
-
-                        return updateQuantity
+                        const movimentService = new StockMovimentService();
+                        movimentService.execute(newStockMovimento);
+                        return productsStockExisting;
                     }
-
-
                 }
             }
         }
-
-        const newProductStock = stockRepository.create({
-            idMoviment,
-            documentCode,
-            barcode: producAlreadyExist,
-            quantity,
-            provider,
-            batch,
-            validity
-        });
-
-        await stockRepository.save(newProductStock);
-        const movimentService = new MovimentService();
-        movimentService.execute({ idMoviment, quantity, stock: newProductStock });
-        return newProductStock;
-
-        //---------------------------------------------------------------------------------
-        //const natureMovimentRepository = AppDataSource.getRepository(natureMoviment);
-
-        // const natureMovimentRepository = await productRepository.findOne({
-        //     where : {barcode}
-        // })
-
-        // if(!natureMovimentRepository){
-        //     throw new AppError({ message: "Nature of moviment not registered!!!"})            
-        // }
-
     }
-
-
 }

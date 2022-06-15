@@ -6,8 +6,8 @@ import {
 } from "typeorm";
 import { Stock } from "./Stock";
 
-@Entity("moviment")
-export class Moviment{
+@Entity("stock_moviment")
+export class Stock_moviment{
     @PrimaryGeneratedColumn("uuid")
     id: string;
 
@@ -17,6 +17,9 @@ export class Moviment{
     @Column()
 	quantity: number;
 
-    @ManyToOne(() => Stock, (Stock) => Stock.moviment)
-    stock: Stock;
+    @Column()
+	documentCode: string;
+
+    @ManyToOne(() => Stock, (Stock) => Stock.stock_moviment)
+    product_in_stock_id: Stock;
 }

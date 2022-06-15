@@ -97,20 +97,12 @@ export class CreateUsersTable1653358552308 implements MigrationInterface {
 						default: "uuid_generate_v4()",
 					},
 					{
-						name: "idMoviment",
-						type: "varchar",
-					},
-					{
-						name: "documentCode",
-						type: "varchar",
-					},
-					{
 						name: "quantity",
-						type: "number",
+						type: "varchar",
 					},
 					{
 						name: "provider",
-						type: "varchar"
+						type: "number",
 					},
 					{
 						name: "batch",
@@ -119,6 +111,10 @@ export class CreateUsersTable1653358552308 implements MigrationInterface {
 					{
 						name: "validity",
 						type: "timestamp",
+					},					
+					{
+						name: "idMoviment",
+						type: "varchar",
 					},
 				],
 			})
@@ -126,25 +122,78 @@ export class CreateUsersTable1653358552308 implements MigrationInterface {
 		await queryRunner.addColumn(
 			"stock",
 			new TableColumn({
-				name:"uuidProduct",
+				name:"product_id",
 				type: "uuid",
 			})
 		);
 		await queryRunner.createForeignKey(
 			"stock",
 			new TableForeignKey({
-				columnNames: ["uuidProduct"],
+				columnNames: ["product_id"],
 				referencedColumnNames: ["id"],
 				referencedTableName: "product",
 				onDelete: "CASCADE",
 			})
 		);
+
+		await queryRunner.createTable(
+			new Table({
+				name: "stock_moviment",
+				columns: [
+					{
+						name: "id",
+						type: "uuid",
+						isPrimary: true,
+						generationStrategy: "uuid",
+						default: "uuid_generate_v4()",
+					},
+					{
+						name: "idMoviment",
+						type: "varchar",
+					},
+					{
+						name: "quantity",
+						type: "number",
+					},
+					{
+						name: "documentCode",
+						type: "varchar",
+					}
+				],
+			})
+		);
+		await queryRunner.addColumn(
+			"stock_moviment",
+			new TableColumn({
+				name:"product_in_stock_id",
+				type: "uuid",
+			})
+		);
+		await queryRunner.createForeignKey(
+			"stock",
+			new TableForeignKey({
+				columnNames: ["product_in_stock_id"],
+				referencedColumnNames: ["id"],
+				referencedTableName: "stock",
+				onDelete: "CASCADE",
+			})
+		);
+
+		
 	}
 
 	public async down(queryRunner: QueryRunner): Promise<void> {
-		await queryRunner.dropTable("users");
-		await queryRunner.dropTable("product");
+		await queryRunner.query("ALTER TABLE `stock_moviment` DROP FOREIGN KEY `product_in_stock_id`");
+		await queryRunner.query("ALTER TABLE `stock_moviment` DROP COLUMN `product_in_stock_id`");
+		await queryRunner.dropTable("stock_moviment");
+
+		await queryRunner.query("ALTER TABLE `stock` DROP FOREIGN KEY `product_id`");
+		await queryRunner.query("ALTER TABLE `stock` DROP COLUMN `product_id`");
 		await queryRunner.dropTable("stock");
+	
+		await queryRunner.dropTable("product");
+		await queryRunner.dropTable("users");
+
 
 	}
 
