@@ -75,9 +75,7 @@ export class StockService {
 
         }
         else {
-
             const listProductsStockExisting = await stockRepository.find({
-                select: { quantity: true },
                 where: [{ product_id: { barcode } }],
 
             });
@@ -88,7 +86,7 @@ export class StockService {
                 quantityTotal += listProductsStockExisting[i].quantity;
             }
             //----------------------------------------------
-
+            console.log(quantityTotal + "----------->");
 
             //Validaçao se tem quantidade suficiente em estoque
             if (quantityTotal < quantity) {
@@ -96,16 +94,13 @@ export class StockService {
             } else {
                 for (var i = 0; i < listProductsStockExisting.length; i++) {
 
-                    const updateQuantity = await stockRepository.findOne({
-                        where: { id: productsStockExisting[i].id },
-                    });
-
-                    if (updateQuantity.quantity < quantity) {
-                        quantity = quantity - updateQuantity.quantity;
-                        updateQuantity.quantity = 0;
-                        await stockRepository.save(updateQuantity);
-                    } else {
-                        updateQuantity.quantity = updateQuantity.quantity - quantity;
+                    if (listProductsStockExisting[i].quantity < quantity) {
+                        quantity = quantity - listProductsStockExisting[i].quantity;
+                        listProductsStockExisting[i].quantity = 0;
+                        await stockRepository.save(listProductsStockExisting[i]);
+                    } else if(listProductsStockExisting[i].quantity >= quantity) {
+                        listProductsStockExisting[i].quantity = listProductsStockExisting[i].quantity - quantity;
+                        await stockRepository.save(listProductsStockExisting[i]);
                         const movimentService = new StockMovimentService();
                         movimentService.execute(newStockMovimento);
                         return productsStockExisting;

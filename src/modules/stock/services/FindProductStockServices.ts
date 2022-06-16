@@ -27,7 +27,7 @@ export class FindProductStockServices {
             },            
             relations: ["product"],
             where: {
-                product : {
+                product_id : {
                     id : productFound.id
                 }
             }

@@ -35,6 +35,6 @@ export class Product {
 	@UpdateDateColumn()
 	last_movement: Date;
 
-	@OneToMany(() => Stock, (Stock)=> Stock.product)
+	@OneToMany(() => Stock, (Stock)=> Stock.product_id)
 	stock: Stock[];
 }
