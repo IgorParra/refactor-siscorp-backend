@@ -1,4 +1,4 @@
-import { movimentationnatureRoutes } from './../../modules/stock/MovimentationNature/routes/index';
+import { movimentationNatureRoutes } from './../../modules/stock/MovimentationNature/routes/index';
 import { Router } from "express";
 import { productRoutes } from "../../modules/product/routes";
 import { loginRoutes } from "../../modules/session/routes";
@@ -9,4 +9,4 @@ export const routes = Router();
 routes.use("/users", userRoutes, userPrivateRoutes);
 routes.use("/products", productRoutes);
 routes.use("/authenticate", loginRoutes);
-routes.use("/movimentation-nature", movimentationnatureRoutes);
+routes.use("/movimentation-nature", movimentationNatureRoutes);

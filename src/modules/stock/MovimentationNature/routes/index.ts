@@ -2,18 +2,18 @@ import { Router } from "express";
 import { EnsureUserIsAuthenticated } from "../../../user/routes/middlewares/EnsureUserIsAuthenticated";
 import { UpdateMovimentationNatureDescription } from "../services/UpdateMovimentationNatureDescription";
 
-export const movimentationnatureRoutes = Router();
+export const movimentationNatureRoutes = Router();
 
-movimentationnatureRoutes.use(EnsureUserIsAuthenticated);
+movimentationNatureRoutes.use(EnsureUserIsAuthenticated);
 
-movimentationnatureRoutes.put("/movimentation-nature/:idToUpdate", async (req, res) => {
+movimentationNatureRoutes.put("/movimentation-nature/:idToUpdate", async (request, response) => {
 
-	const { id } = req.params;
-	const { desc } = req.body;
+	const { id } = request.params;
+	const { desc } = request.body;
 
-	const movimentationnatureService = new UpdateMovimentationNatureDescription();
+	const movimentationNatureService = new UpdateMovimentationNatureDescription();
 
-	const movimentationnatureUpdate = await movimentationnatureService.execute(id, desc);
+	const movimentationNatureUpdate = await movimentationNatureService.execute(id, desc);
 
-	return res.json(movimentationnatureUpdate);
+	return response.json(movimentationNatureUpdate);
 });
