@@ -13,8 +13,8 @@ app.use(
 	(err: Error, request: Request, response: Response, next: NextFunction) => {
 		if (err instanceof AppError) {
 			return response
-				.status(err.statusCode)
-				.json({ status: "error", message: err.message });
+			.status(err.statusCode)
+			.json({ status: "error", message: err.message });
 		}
 
 		console.log(err);
