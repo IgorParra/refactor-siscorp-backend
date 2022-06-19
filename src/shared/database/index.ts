@@ -1,10 +1,8 @@
 import "reflect-metadata";
 import { DataSource } from "typeorm";
+import { MovimentationNature } from "../../modules/movimentationNature/entities/MovimentationNature";
+import { Product } from "../../modules/product/entities/Product";
 import { User } from "../../modules/user/entities/User";
-import { Product } from "../../modules/user/entities/Product";
-import { MovimentationNature } from "../../modules/user/entities/MovimentationNature";
-
-
 
 export const AppDataSource = new DataSource({
 	type: "postgres",
@@ -13,7 +11,7 @@ export const AppDataSource = new DataSource({
 	username: "postgres",
 	password: "sisCorpPG16734",
 	database: "postgres",
-	entities: [User,Product,MovimentationNature],
+	entities: [User, Product, MovimentationNature],
 	migrations: ["src/database/migrations/*.ts"],
 	synchronize: true,
 	logging: false,
