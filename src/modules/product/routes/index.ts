@@ -1,17 +1,34 @@
 import { Router } from "express";
-import { EnshureUserIsAuthenticated } from "../../user/routes/middlewares/EnsureUserIsAuthenticated";
-import { CreateProductService } from "./services/CreateProductService";
+import { EnsureUserIsAuthenticated } from "../../../shared/routes/middlewares/EnsureUserIsAuthenticated";
+import { CreateProductService } from "../services/CreateProductService";
+import { UpdateProductService } from "../services/UpdateProductService";
 
 export const productRoutes = Router();
 
-productRoutes.use(EnshureUserIsAuthenticated);
+productRoutes.use(EnsureUserIsAuthenticated);
 
 productRoutes.post("/", async (request, response) => {
 	const product = request.body;
 
-	const productService = new CreateProductService();
+	const createProduc = new CreateProductService();
 
-	const newProduct = await productService.execute(product);
+	const newProduct = await createProduc.execute(product);
 
 	return response.json(newProduct);
+});
+
+productRoutes.put("/", async (request, response) => {
+	const { barcode, name, brand, description, complementation } = request.body;
+
+	const updateProduct = new UpdateProductService();
+
+	const productUpdate = await updateProduct.execute({
+		barcode,
+		name,
+		brand,
+		description,
+		complementation,
+	});
+
+	return response.json(productUpdate);
 });
