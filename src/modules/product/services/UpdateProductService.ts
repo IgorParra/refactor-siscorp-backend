@@ -1,5 +1,5 @@
-import { AppDataSource } from "../../../../shared/database";
-import { Product } from "../../../user/entities/Product";
+import { AppDataSource } from "../../../shared/database";
+import { Product } from "../../user/entities/Product";
 
 interface UpdateProductServiceProps {
 	barcode: string;
