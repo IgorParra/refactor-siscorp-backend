@@ -4,37 +4,33 @@ import {
 	Column,
 	CreateDateColumn,
 	Entity,
-    ManyToOne,
-    OneToMany,
-    PrimaryGeneratedColumn,
+	ManyToOne,
+	PrimaryGeneratedColumn,
 } from "typeorm";
 
 @Entity("stock")
 export class Stock {
-    
-    @PrimaryGeneratedColumn("uuid")
-    id: string;
+	@PrimaryGeneratedColumn("uuid")
+	id: string;
 
-    @Column()
-    idMoviment: string;
+	@Column()
+	idMoviment: string;
 
-    @Column()
+	@Column()
 	documentCode: string;
 
-    @Column()
-    quantity: number;
+	@Column()
+	quantity: number;
 
-    @Column()
-    provider: string;
+	@Column()
+	provider: string;
 
-    @Column()
-    batch: string;
+	@Column()
+	batch: string;
 
 	@CreateDateColumn()
 	validity: Date;
 
-    @ManyToOne(() => Product, (Product) => Product.stock)
-    barcode: Product;
-
-
+	@ManyToOne(() => Product, (Product) => Product.barcode)
+	barcode: Product;
 }

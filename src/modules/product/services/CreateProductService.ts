@@ -1,6 +1,6 @@
 import { AppDataSource } from "../../../shared/database";
 import AppError from "../../../shared/errors/AppError";
-import { Product } from "../entity/Product";
+import { Product } from "../../user/entities/Product";
 
 interface Request {
 	barcode: string;
@@ -18,9 +18,9 @@ export class CreateProductService {
 		description,
 		complementation,
 	}: Request): Promise<Product> {
-		const ProductRepository = AppDataSource.getRepository(Product);
+		const productRepository = AppDataSource.getRepository(Product);
 
-		const productAlreadyExist = await ProductRepository.findOne({
+		const productAlreadyExist = await productRepository.findOne({
 			where: { barcode },
 		});
 
@@ -28,7 +28,7 @@ export class CreateProductService {
 			throw new AppError({ message: "barcode already used" });
 		}
 
-		const newProduct = ProductRepository.create({
+		const newProduct = productRepository.create({
 			barcode,
 			name,
 			brand,
@@ -36,7 +36,7 @@ export class CreateProductService {
 			complementation,
 		});
 
-		await ProductRepository.save(newProduct);
+		await productRepository.save(newProduct);
 
 		return newProduct;
 	}
