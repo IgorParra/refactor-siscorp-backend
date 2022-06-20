@@ -1,4 +1,5 @@
 import { Router } from "express";
+import { movimentationNatureRoutes } from "../../modules/movimentationNature/routes";
 import { productRoutes } from "../../modules/product/routes";
 import { loginRoutes } from "../../modules/session/routes";
 import { stockRoutes } from "../../modules/stock/routes/index";
@@ -10,4 +11,4 @@ routes.use("/users", userRoutes, userPrivateRoutes);
 routes.use("/products", productRoutes);
 routes.use("/authenticate", loginRoutes);
 routes.use("/stock", stockRoutes);
-
+routes.use("/movimentation-nature", movimentationNatureRoutes);

@@ -1,11 +1,20 @@
-import { Product } from "../../product/entity/Product";
+import { Product } from "../../product/entities/Product";
 
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import {
+	Column,
+	CreateDateColumn,
+	Entity,
+	ManyToOne,
+	PrimaryGeneratedColumn,
+} from "typeorm";
 
 @Entity("stock")
 export class Stock {
 	@PrimaryGeneratedColumn("uuid")
 	id: string;
+
+	@Column()
+	idMoviment: string;
 
 	@Column()
 	quantity: number;
@@ -16,12 +25,9 @@ export class Stock {
 	@Column()
 	batch: string;
 
-	@Column("timestamp")
+	@CreateDateColumn()
 	validity: Date;
 
-	@ManyToOne(() => Product, (Product) => Product.id)
-	product_id: Product;
-
-	@Column()
-	idMoviment: string;
+	@ManyToOne(() => Product, (Product) => Product.barcode)
+	product_barcode: string;
 }
