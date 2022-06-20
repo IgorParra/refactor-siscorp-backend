@@ -1,6 +1,6 @@
 import { AppDataSource } from "../../../shared/database";
 import AppError from "../../../shared/errors/AppError";
-import { Product } from "../../user/entities/Product";
+import { Product } from "../entities/Product";
 
 interface Request {
 	barcode: string;
@@ -11,13 +11,8 @@ interface Request {
 }
 
 export class CreateProductService {
-	public async execute({
-		barcode,
-		name,
-		brand,
-		description,
-		complementation,
-	}: Request): Promise<Product> {
+	public async execute(product: Request): Promise<Product> {
+		const { barcode } = product;
 		const productRepository = AppDataSource.getRepository(Product);
 
 		const productAlreadyExist = await productRepository.findOne({
@@ -28,13 +23,7 @@ export class CreateProductService {
 			throw new AppError({ message: "barcode already used" });
 		}
 
-		const newProduct = productRepository.create({
-			barcode,
-			name,
-			brand,
-			description,
-			complementation,
-		});
+		const newProduct = productRepository.create(product);
 
 		await productRepository.save(newProduct);
 

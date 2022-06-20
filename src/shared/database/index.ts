@@ -1,3 +1,5 @@
+import { Stock } from "modules/stock/entity/Stock";
+import { StockMoviment } from "modules/stock/entity/StockMoviment";
 import "reflect-metadata";
 import { DataSource } from "typeorm";
 import { MovimentationNature } from "../../modules/movimentationNature/entities/MovimentationNature";
@@ -11,7 +13,7 @@ export const AppDataSource = new DataSource({
 	username: "postgres",
 	password: "sisCorpPG16734",
 	database: "postgres",
-	entities: [User, Product, MovimentationNature],
+	entities: [User, Product, MovimentationNature, Stock, StockMoviment],
 	migrations: ["src/database/migrations/*.ts"],
 	synchronize: true,
 	logging: false,

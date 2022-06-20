@@ -17,9 +17,6 @@ export class Stock {
 	idMoviment: string;
 
 	@Column()
-	documentCode: string;
-
-	@Column()
 	quantity: number;
 
 	@Column()
@@ -32,5 +29,5 @@ export class Stock {
 	validity: Date;
 
 	@ManyToOne(() => Product, (Product) => Product.barcode)
-	barcode: Product;
+	product_barcode: string;
 }
