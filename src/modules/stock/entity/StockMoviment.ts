@@ -1,9 +1,9 @@
-import { Product } from "modules/product/entity/Product";
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
-import { Stock } from "./Stock";
+import { User } from "../../../modules/user/entities/User";
+import { Product } from "../../product/entities/Product";
 
 @Entity("stock_moviment")
-export class Stock_moviment {
+export class StockMoviment {
 	@PrimaryGeneratedColumn("uuid")
 	id: string;
 
@@ -14,8 +14,11 @@ export class Stock_moviment {
 	quantity: number;
 
 	@Column()
-	documentCode: string;
+	document: string;
 
 	@ManyToOne(() => Product, (Product) => Product.barcode)
-	product: Stock;
+	product_barcode: string;
+
+	@ManyToOne(() => User, (User) => User.id)
+	user_id: string;
 }

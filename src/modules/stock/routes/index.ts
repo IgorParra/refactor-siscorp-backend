@@ -1,8 +1,8 @@
 import { Router } from "express";
-import { EnsureUserIsAuthenticated } from "../../../shared/routes/middlewares/ensureUserIsAuthenticated";
+import { EnsureUserIsAuthenticated } from "../../../shared/routes/middlewares/EnsureUserIsAuthenticated";
 import { FindProductStockServices } from "../services/FindProductStockServices";
 import { GetAllProductsInStockService } from "../services/GetAllProductsService";
-import { StockService } from "../services/StockService";
+import { MovimentStockService } from "../services/StockService";
 
 export const stockRoutes = Router();
 
@@ -12,19 +12,18 @@ stockRoutes.get("/:barcode", async (request, response) => {
 	const { barcode } = request.params;
 
 	const findStockServices = new FindProductStockServices();
-	const listProductStockFindBarcode = await findStockServices.execute(barcode);
+	const productList = await findStockServices.execute(barcode);
 
-	console.log(listProductStockFindBarcode);
-	return response.json(listProductStockFindBarcode);
+	return response.json(productList);
 });
 
 stockRoutes.post("/", async (request, response) => {
-	const stock = request.body;
+	const params = request.body;
 
-	const stockService = new StockService();
-	const newStock = await stockService.execute(stock);
+	const movimentStock = new MovimentStockService();
+	const result = await movimentStock.execute(params);
 
-	return response.json(newStock);
+	return response.json(result);
 });
 
 stockRoutes.get("/", async (request, response) => {

@@ -30,7 +30,7 @@ export class CreateStockMovimentsTable1655682605663
 						type: "number",
 					},
 					{
-						name: "documentCode",
+						name: "document",
 						type: "varchar",
 					},
 				],

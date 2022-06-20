@@ -10,9 +10,9 @@ productRoutes.use(EnsureUserIsAuthenticated);
 productRoutes.post("/", async (request, response) => {
 	const product = request.body;
 
-	const createProduc = new CreateProductService();
+	const createProduct = new CreateProductService();
 
-	const newProduct = await createProduc.execute(product);
+	const newProduct = await createProduct.execute(product);
 
 	return response.json(newProduct);
 });
