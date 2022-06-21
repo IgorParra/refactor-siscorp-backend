@@ -11,20 +11,20 @@ export class Product {
 	@PrimaryGeneratedColumn("uuid")
 	id: string;
 
-    @Column()
-    barcode: string;
+	@Column()
+	barcode: string;
 
-    @Column()
+	@Column()
 	name: string;
 
-    @Column()
-    brand: string;
+	@Column()
+	brand: string;
 
-    @Column()
-    description: string;
+	@Column()
+	description: string;
 
-    @Column()
-    complementation: string;
+	@Column()
+	complementation: string;
 
 	@CreateDateColumn()
 	created_at: Date;

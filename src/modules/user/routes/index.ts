@@ -1,6 +1,6 @@
 import { Router } from "express";
 import "reflect-metadata";
-import { EnshureUserIsAuthenticated } from "../routes/middlewares/EnsureUserIsAuthenticated";
+import { EnsureUserIsAuthenticated } from "../../../shared/routes/middlewares/EnsureUserIsAuthenticated";
 import {
 	CreateUserService,
 	DeleteUserService,
