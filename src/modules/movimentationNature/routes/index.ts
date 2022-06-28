@@ -1,7 +1,10 @@
-import { Router } from "express";
-import { UpdateMovimentationNatureDescription } from "modules/movimentationNature/services/UpdateMovimentationNatureDescription";
-import { EnsureUserIsAuthenticated } from "../../../shared/routes/middlewares/EnsureUserIsAuthenticated";
-import { CreateMovimentationNatureService } from "../services/CreateNatureMovimentation";
+import { Router } from 'express'
+
+import {
+  UpdateMovimentationNatureDescription,
+} from '../../../modules/movimentationNature/services/UpdateMovimentationNatureDescription'
+import { EnsureUserIsAuthenticated } from '../../../shared/routes/middlewares/EnsureUserIsAuthenticated'
+import { CreateMovimentationNatureService } from '../services/CreateNatureMovimentation'
 
 export const movimentationNatureRoutes = Router();
 

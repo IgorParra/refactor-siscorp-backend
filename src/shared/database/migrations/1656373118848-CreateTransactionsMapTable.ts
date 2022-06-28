@@ -6,13 +6,13 @@ import {
 	TableForeignKey,
 } from "typeorm";
 
-export class CreateStockMovimentsTable1655682605663
+export class CreateTransactionsMapTable1656373118848
 	implements MigrationInterface
 {
 	public async up(queryRunner: QueryRunner): Promise<void> {
 		await queryRunner.createTable(
 			new Table({
-				name: "stock_moviment",
+				name: "transaction_map",
 				columns: [
 					{
 						name: "id",
@@ -21,42 +21,45 @@ export class CreateStockMovimentsTable1655682605663
 						generationStrategy: "uuid",
 						default: "uuid_generate_v4()",
 					},
+					{ name: "isCredit", type: "boolean" },
 					{
-						name: "idMoviment",
+						name: "internal_code",
 						type: "varchar",
+						isNullable: true,
 					},
 					{
-						name: "quantity",
-						type: "int",
-					},
-					{
-						name: "document",
+						name: "transaction_name",
 						type: "varchar",
+						isNullable: true,
 					},
 				],
 			})
 		);
+
 		await queryRunner.addColumn(
-			"stock_moviment",
+			"transaction_map",
 			new TableColumn({
-				name: "product_barcode",
+				name: "accounts_plan_id",
 				type: "uuid",
+				isNullable: true,
+				default: null,
 			})
 		);
+
 		await queryRunner.createForeignKey(
-			"stock_moviment",
+			"transaction_map",
 			new TableForeignKey({
-				columnNames: ["product_barcode"],
+				columnNames: ["accounts_plan_id"],
 				referencedColumnNames: ["id"],
-				referencedTableName: "stock",
+				referencedTableName: "accounts_plan",
 				onDelete: "CASCADE",
 			})
 		);
 	}
 
 	public async down(queryRunner: QueryRunner): Promise<void> {
-		await queryRunner.dropForeignKey("stock_moviment", "product_barcode");
-		await queryRunner.dropColumn("stock_moviment", "product_barcode");
-		await queryRunner.dropTable("stock_moviment");
+		await queryRunner.dropForeignKey("transaction_map", "accounts_plan_id");
+		await queryRunner.dropColumn("transaction_map", "accounts_plan_id");
+		await queryRunner.dropTable("transaction_map");
 	}
 }

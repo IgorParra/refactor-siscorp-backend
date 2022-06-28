@@ -29,7 +29,7 @@ export class CreateStockTable1655664195111 implements MigrationInterface {
 					},
 					{
 						name: "quantity",
-						type: "number",
+						type: "int",
 					},
 					{
 						name: "provider",
@@ -58,7 +58,7 @@ export class CreateStockTable1655664195111 implements MigrationInterface {
 			new TableForeignKey({
 				columnNames: ["product_id"],
 				referencedColumnNames: ["id"],
-				referencedTableName: "product",
+				referencedTableName: "products",
 				onDelete: "CASCADE",
 			})
 		);
