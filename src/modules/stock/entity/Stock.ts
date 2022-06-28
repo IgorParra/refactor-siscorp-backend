@@ -1,9 +1,12 @@
 import { Product } from "../../product/entities/Product";
+import { MovimentationNature } from "./../../movimentationNature/entities/MovimentationNature";
 
 import {
 	Column,
 	CreateDateColumn,
 	Entity,
+	JoinColumn,
+	ManyToMany,
 	ManyToOne,
 	PrimaryGeneratedColumn,
 } from "typeorm";
@@ -13,8 +16,18 @@ export class Stock {
 	@PrimaryGeneratedColumn("uuid")
 	id: string;
 
-	@Column()
-	idMoviment: string;
+	@ManyToMany(
+		() => MovimentationNature,
+		(MovimentationNature) => MovimentationNature.id,
+		{
+			cascade: true,
+		}
+	)
+	@JoinColumn({
+		referencedColumnName: "id",
+		name: "idMoviment",
+	})
+	idMoviment: MovimentationNature["id"];
 
 	@Column()
 	quantity: number;
@@ -28,6 +41,10 @@ export class Stock {
 	@CreateDateColumn()
 	validity: Date;
 
-	@ManyToOne(() => Product, (Product) => Product.barcode)
-	product_barcode: string;
+	@ManyToOne(() => Product, (Product) => Product.id, { eager: true })
+	@JoinColumn({
+		referencedColumnName: "id",
+		name: "product_id",
+	})
+	product_id: Product["id"];
 }

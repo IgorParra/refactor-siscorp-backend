@@ -15,7 +15,9 @@ export class AccountsPlan {
 	@Column()
 	description: string;
 
-	@ManyToMany(() => AccountsPlan, (AccountsPlan) => AccountsPlan.id)
+	@ManyToMany(() => AccountsPlan, (AccountsPlan) => AccountsPlan.id, {
+		cascade: true,
+	})
 	@JoinColumn({ referencedColumnName: "id" })
 	parent: AccountsPlan;
 

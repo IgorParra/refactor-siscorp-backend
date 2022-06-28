@@ -1,12 +1,11 @@
 import { Router } from "express";
-import { EnsureUserIsAuthenticated } from "../../../shared/routes/middlewares/EnsureUserIsAuthenticated";
 import { FindProductStockServices } from "../services/FindProductStockServices";
 import { GetAllProductsInStockService } from "../services/GetAllProductsService";
 import { MovimentStockService } from "../services/StockService";
 
 export const stockRoutes = Router();
 
-stockRoutes.use(EnsureUserIsAuthenticated);
+// stockRoutes.use(EnsureUserIsAuthenticated);
 
 stockRoutes.get("/:barcode", async (request, response) => {
 	const { barcode } = request.params;

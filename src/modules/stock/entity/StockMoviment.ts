@@ -16,8 +16,8 @@ export class StockMoviment {
 	@Column()
 	document: string;
 
-	@ManyToOne(() => Product, (Product) => Product.barcode)
-	product_barcode: string;
+	@ManyToOne(() => Product, (Product) => Product.id)
+	product_id: string;
 
 	@ManyToOne(() => User, (User) => User.id)
 	user_id: string;

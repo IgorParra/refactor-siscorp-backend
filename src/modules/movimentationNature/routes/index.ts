@@ -1,26 +1,18 @@
-import { Router } from 'express'
+import { Router } from "express";
 
-import {
-  UpdateMovimentationNatureDescription,
-} from '../../../modules/movimentationNature/services/UpdateMovimentationNatureDescription'
-import { EnsureUserIsAuthenticated } from '../../../shared/routes/middlewares/EnsureUserIsAuthenticated'
-import { CreateMovimentationNatureService } from '../services/CreateNatureMovimentation'
+import { UpdateMovimentationNatureDescription } from "../../../modules/movimentationNature/services/UpdateMovimentationNatureDescription";
+import { CreateMovimentationNatureService } from "../services/CreateNatureMovimentation";
 
 export const movimentationNatureRoutes = Router();
-
-movimentationNatureRoutes.use(EnsureUserIsAuthenticated);
 
 movimentationNatureRoutes.post("/", async (request, response) => {
 	const movimentationNature = request.body;
 
-	const movimentationNatureRoutesService =
-		new CreateMovimentationNatureService();
+	const movimentationNatureService = new CreateMovimentationNatureService();
 
-	const newMovimentationNature = await movimentationNatureRoutesService.execute(
-		movimentationNature
-	);
+	await movimentationNatureService.execute(movimentationNature);
 
-	return response.json(newMovimentationNature);
+	return response.status(202).json({ message: "criado com suceso" });
 });
 movimentationNatureRoutes.put(
 	"/movimentation-nature/:idToUpdate",

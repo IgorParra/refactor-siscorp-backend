@@ -1,17 +1,14 @@
-import AppError from '../../../shared/errors/AppError'
-import { AppDataSource } from '../../../shared/database'
-import { MovimentationNature } from '../entities/MovimentationNature'
+import { AppDataSource } from "../../../shared/database";
+import AppError from "../../../shared/errors/AppError";
+import { MovimentationNature } from "../entities/MovimentationNature";
 
-interface Request {
-	description: string;
-	isEntry: boolean;
-}
+type Request = Omit<MovimentationNature, "id"> & {
+	accounts_plan: string;
+};
 
 export class CreateMovimentationNatureService {
-	public async execute({
-		description,
-		isEntry,
-	}: Request): Promise<MovimentationNature> {
+	public async execute(props: Request): Promise<MovimentationNature> {
+		const { description, isEntry, transactionId } = props;
 		const movimentationNatureRepository =
 			AppDataSource.getRepository(MovimentationNature);
 
@@ -24,13 +21,13 @@ export class CreateMovimentationNatureService {
 			throw new AppError({ message: "Description already used" });
 		}
 
-		const newMovimentationNature = movimentationNatureRepository.create({
-			description,
-			isEntry,
-		});
+		movimentationNatureRepository
+			.createQueryBuilder("movimentation_nature")
+			.insert()
+			.into(MovimentationNature)
+			.values([{ description, isEntry, transactionId }])
+			.execute();
 
-		await movimentationNatureRepository.save(newMovimentationNature);
-
-		return newMovimentationNature;
+		return;
 	}
 }

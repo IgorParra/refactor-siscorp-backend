@@ -1,0 +1,8 @@
+"id","description","balance","parent"
+"3b515630-b79e-4d66-976c-fafa1e97bf3b",passivo,0.0,
+e62fea88-24ed-4cf9-8d70-a067376626c4,circulante,0.0,"3b515630-b79e-4d66-976c-fafa1e97bf3b"
+fac6d3e2-412e-4952-9176-1e9664c07d3d,contas a pagar,0.0,e62fea88-24ed-4cf9-8d70-a067376626c4
+ca67ca8a-1169-4a20-abf9-d013ccca1087,fornecedor,0.0,fac6d3e2-412e-4952-9176-1e9664c07d3d
+dcd871b9-3cb4-47af-a64c-a4efb819b1da,ativo,0.0,
+a973f798-a2fe-4688-88f1-4662114410d2,estoques,0.0,dcd871b9-3cb4-47af-a64c-a4efb819b1da
+f18d0535-615b-4baa-8d45-8eb54704befc,mercadorias,0.0,a973f798-a2fe-4688-88f1-4662114410d2
